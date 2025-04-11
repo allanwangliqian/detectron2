@@ -56,7 +56,7 @@ class VideoVisualizer:
         self._color_pool = random_colors(self._max_num_instances, rgb=True, maximum=1)
         self._color_idx_set = set(range(len(self._color_pool)))
 
-    def draw_instance_predictions(self, frame, predictions):
+    def draw_instance_predictions(self, frame, predictions, alpha=None):
         """
         Draw instance-level prediction results on an image.
 
@@ -115,9 +115,11 @@ class VideoVisualizer:
                     (masks.any(dim=0) > 0).numpy() if masks is not None else None
                 )
             )
-            alpha = 0.3
+            if alpha is None:
+                alpha = 0.3
         else:
-            alpha = 0.5
+            if alpha is None:
+                alpha = 0.5
 
         labels = (
             None
@@ -140,7 +142,7 @@ class VideoVisualizer:
 
         return frame_visualizer.output
 
-    def draw_sem_seg(self, frame, sem_seg, area_threshold=None):
+    def draw_sem_seg(self, frame, sem_seg, area_threshold=None, alpha=0.8):
         """
         Args:
             sem_seg (ndarray or Tensor): semantic segmentation of shape (H, W),
@@ -149,7 +151,7 @@ class VideoVisualizer:
         """
         # don't need to do anything special
         frame_visualizer = Visualizer(frame, self.metadata)
-        frame_visualizer.draw_sem_seg(sem_seg, area_threshold=None)
+        frame_visualizer.draw_sem_seg(sem_seg, area_threshold=None, alpha=alpha)
         return frame_visualizer.output
 
     def draw_panoptic_seg_predictions(
