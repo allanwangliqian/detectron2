@@ -701,7 +701,7 @@ class Visualizer:
 
         for i in range(num_instances):
             if labels is not None:
-                if not labels[i] == "person":
+                if not ("person" in labels[i]):
                     continue
 
             color = assigned_colors[i]
